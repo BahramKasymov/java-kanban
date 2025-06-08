@@ -1,11 +1,10 @@
 
 
 public class Task {
-    private String title;
-    private String description;
+    private final String title;
+    private final String description;
     private int id;
     private Status status;
-
 
     public Task(String title, String description, int id, Status status) {
         this.title = title;
@@ -13,6 +12,7 @@ public class Task {
         this.id = id;
         this.status = status;
     }
+
     public String getTitle() {
         return title;
     }
@@ -34,6 +34,29 @@ public class Task {
     }
 
     public void setId(int id) {
-        this.id = id; // Метод добавлен для установки ID задач
+        this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task task)) return false;
+        return id == task.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        if (title != null) {
+            hash = hash + title.hashCode();
+        }
+        hash = hash * 31;
+        if (description != null) {
+            hash = hash + description.hashCode();
+        }
+        return hash;
+    }
+
+
+
 }
