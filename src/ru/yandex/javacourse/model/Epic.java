@@ -1,7 +1,9 @@
+package ru.yandex.javacourse.model;
+
 import java.util.ArrayList;
 import java.util.List;
 
-class Epic extends Task {
+public class Epic extends Task {
 
     private List<Subtask> subtasks = new ArrayList<>();
 
@@ -27,6 +29,15 @@ class Epic extends Task {
         } else {
             setStatus(Status.IN_PROGRESS);
         }
+    }
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", status=" + getStatus() +
+                '}';
     }
 
 

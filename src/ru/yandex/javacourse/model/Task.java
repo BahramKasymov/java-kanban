@@ -1,4 +1,4 @@
-
+package ru.yandex.javacourse.model;
 
 public class Task {
     private final String title;
@@ -58,5 +58,13 @@ public class Task {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                ", status=" + status +
+                '}';
+    }
 }
