@@ -1,11 +1,12 @@
 package ru.yandex.javacourse;
 
 import ru.yandex.javacourse.model.*;
+import ru.yandex.javacourse.service.InMemoryTaskManager;
 import ru.yandex.javacourse.service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new InMemoryTaskManager();
 
         // Создание задач, связанных с покупкой машины
         Task task1 = new Task("Исследовать модели автомобилей", "Сравните популярные модели автомобилей", 0, Status.NEW);
@@ -13,7 +14,7 @@ public class Main {
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
-        // Создание эпиков и подзадач, связанных с процессом покупки
+        // Создание эпиков и подзадач
         Epic epic1 = new Epic("Процесс покупки автомобиля", "Шаги по покупке автомобиля", 0, Status.NEW);
         Subtask subtask1 = new Subtask("Поиск автосалонов", "Найти ближайшие автосалоны", 0, Status.NEW, epic1);
         Subtask subtask2 = new Subtask("Тест-драйв автомобиля", "Запланировать тест-драйв выбранной модели", 0, Status.NEW, epic1);
@@ -60,5 +61,16 @@ public class Main {
         System.out.println("Все задачи после удаления: " + taskManager.getAllTasks());
         System.out.println("Все эпики после удаления: " + taskManager.getAllEpics());
         System.out.println("Все подзадачи после удаления: " + taskManager.getAllSubtasks());
+
+        // Новый блок — проверка истории просмотров
+        taskManager.getTaskById(task2.getId());
+        taskManager.getEpicById(epic2.getId());
+        taskManager.getSubtaskById(subtask3.getId());
+        taskManager.getTaskById(task2.getId()); // повторный просмотр
+
+        System.out.println("История просмотров:");
+        for (Task t : taskManager.getHistory()) {
+            System.out.println(t);
+        }
     }
 }
