@@ -2,11 +2,13 @@ package ru.yandex.javacourse;
 
 import ru.yandex.javacourse.model.*;
 import ru.yandex.javacourse.service.InMemoryTaskManager;
+import ru.yandex.javacourse.service.Managers;
 import ru.yandex.javacourse.service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getDefault();
+
 
         // Создание задач, связанных с покупкой машины
         Task task1 = new Task("Исследовать модели автомобилей", "Сравните популярные модели автомобилей", 0, Status.NEW);
