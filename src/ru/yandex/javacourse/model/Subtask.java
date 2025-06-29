@@ -1,20 +1,19 @@
 package ru.yandex.javacourse.model;
 
 public class Subtask extends Task {
-    private Epic epic;
+    private int epicId;
 
     public Subtask(String title, String description, int id, Status status, Epic epic) {
         super(title, description, id, status);
-        this.epic = epic;
+        this.epicId = epic.getId();
     }
 
-    public Epic getEpic() {
-        return epic;
+    public int getEpicId() {
+        return epicId;
     }
 
-
-    public void setEpic(Epic epic) {
-        this.epic = epic;
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     @Override
@@ -24,8 +23,10 @@ public class Subtask extends Task {
                 ", title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
-                ", epicId=" + (epic != null ? epic.getId() : "null") +
+                ", epicId=" + epicId +
                 '}';
     }
-}
 
+    public void setEpic(Epic epic) {
+    }
+}

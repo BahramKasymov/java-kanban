@@ -1,12 +1,13 @@
 package ru.yandex.javacourse.service;
 
-public final class Managers {
-
-    private Managers() {
-        // Приватный конструктор: запретить создание экземпляра этого класса.
-    }
+// Утилитарный класс для создания менеджеров
+public class Managers {
 
     public static TaskManager getDefault() {
         return new InMemoryTaskManager();
+    }
+
+    public static HistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
     }
 }

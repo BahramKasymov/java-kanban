@@ -13,11 +13,12 @@ public class Main {
         Task task2 = new Task("Task 2", "Описание Task 2", 0, Status.NEW);
 
         Epic epic1 = new Epic("Epic 1", "Описание Epic 1", 0, Status.NEW);
+        taskManager.createEpic(epic1); // Сначала создаём эпик, чтобы получить ID
+
         Subtask subtask1 = new Subtask("Subtask 1", "Описание Subtask 1", 0, Status.NEW, epic1);
 
         taskManager.createTask(task1);
         taskManager.createTask(task2);
-        taskManager.createEpic(epic1);
         taskManager.createSubtask(subtask1);
 
         // Вызываем методы, которые формируют историю
@@ -29,6 +30,7 @@ public class Main {
         // Печатаем всё
         printAllTasks(taskManager);
     }
+
 
     private static void printAllTasks(TaskManager manager) {
         System.out.println("Задачи:");
