@@ -5,7 +5,12 @@ public class Subtask extends Task {
 
     public Subtask(String title, String description, int id, Status status, Epic epic) {
         super(title, description, id, status);
-        this.epicId = epic.getId();
+        if (epic != null) {
+            if (epic.getId() == id) {
+                throw new IllegalArgumentException("Subtask cannot be its own epic");
+            }
+            this.epicId = epic.getId();
+        }
     }
 
     public int getEpicId() {
@@ -28,5 +33,12 @@ public class Subtask extends Task {
     }
 
     public void setEpic(Epic epic) {
+        if (epic == null) {
+            throw new IllegalArgumentException("Epic cannot be null");
+        }
+        if (epic.getId() == this.getId()) {
+            throw new IllegalArgumentException("Subtask cannot be its own epic");
+        }
+        this.epicId = epic.getId();
     }
 }

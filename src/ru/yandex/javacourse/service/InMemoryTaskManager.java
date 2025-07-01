@@ -5,10 +5,10 @@ import ru.yandex.javacourse.model.Status;
 import ru.yandex.javacourse.model.Subtask;
 import ru.yandex.javacourse.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+
+ //Реализация менеджера задач, хранящего данные в памяти
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -39,6 +39,10 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             epic.getSubtasks().add(subtask);
             updateEpicStatus(epic);
+        } else {
+            throw new IllegalArgumentException(
+                    "Epic с ID " + subtask.getEpicId() + " не найден. Сначала создайте эпик."
+            );
         }
     }
 
@@ -86,30 +90,59 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        tasks.put(task.getId(), task);
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+        } else {
+            throw new NoSuchElementException(
+                    "Задача с ID " + task.getId() + " не найдена для обновления."
+            );
+        }
     }
 
     @Override
     public void updateEpic(Epic epic) {
-        epics.put(epic.getId(), epic);
+        if (epics.containsKey(epic.getId())) {
+            epics.put(epic.getId(), epic);
+            updateEpicStatus(epic);
+        } else {
+            throw new NoSuchElementException(
+                    "Эпик с ID " + epic.getId() + " не найден для обновления."
+            );
+        }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        subtasks.put(subtask.getId(), subtask);
-        Epic epic = epics.get(subtask.getEpicId());
-        if (epic != null) {
-            updateEpicStatus(epic);
+        if (subtasks.containsKey(subtask.getId())) {
+            subtasks.put(subtask.getId(), subtask);
+            Epic epic = epics.get(subtask.getEpicId());
+            if (epic != null) {
+                updateEpicStatus(epic);
+            } else {
+                throw new NoSuchElementException(
+                        "Эпик с ID " + subtask.getEpicId() + " не найден для обновления статуса."
+                );
+            }
+        } else {
+            throw new NoSuchElementException(
+                    "Подзадача с ID " + subtask.getId() + " не найдена для обновления."
+            );
         }
     }
 
     @Override
     public void deleteTaskById(int id) {
+        if (!tasks.containsKey(id)) {
+            throw new NoSuchElementException("Задача с ID " + id + " не найдена для удаления.");
+        }
         tasks.remove(id);
     }
 
     @Override
     public void deleteEpicById(int id) {
+        if (!epics.containsKey(id)) {
+            throw new NoSuchElementException("Эпик с ID " + id + " не найден для удаления.");
+        }
         epics.remove(id);
         subtasks.entrySet().removeIf(entry -> entry.getValue().getEpicId() == id);
     }
@@ -122,12 +155,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubtasksForEpic(int epicId) {
-        subtasks.entrySet().removeIf(entry -> entry.getValue().getEpicId() == epicId);
         Epic epic = epics.get(epicId);
-        if (epic != null) {
-            epic.getSubtasks().clear();
-            updateEpicStatus(epic);
+        if (epic == null) {
+            throw new NoSuchElementException("Эпик с ID " + epicId + " не найден для удаления подзадач.");
         }
+        subtasks.entrySet().removeIf(entry -> entry.getValue().getEpicId() == epicId);
+        epic.getSubtasks().clear();
+        updateEpicStatus(epic);
     }
 
     @Override
@@ -145,6 +179,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return epicSubtasks;
     }
+
+
+     //Обновляет статус эпика на основе статусов его подзадач.
 
     private void updateEpicStatus(Epic epic) {
         if (epic.getSubtasks().isEmpty()) {
