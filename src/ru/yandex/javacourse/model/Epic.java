@@ -5,31 +5,28 @@ import java.util.List;
 
 public class Epic extends Task {
 
-    private List<Subtask> subtasks = new ArrayList<>();
+    private final List<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(String title, String description, int id, Status status) {
         super(title, description, id, status);
-        this.subtasks = new ArrayList<>();
     }
 
-    public void addSubtask(Subtask subtask) {
-        subtasks.add(subtask);
-        subtask.setEpicId(this.getId());
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
     }
 
-    public List<Subtask> getSubtasks() {
-        return subtasks;
-    }
-
-    public void updateEpicStatus() {
-        if (subtasks.isEmpty()) {
-            setStatus(Status.NEW);
-        } else if (subtasks.stream().allMatch(subtask -> subtask.getStatus() == Status.DONE)) {
-            setStatus(Status.DONE);
-        } else {
-            setStatus(Status.IN_PROGRESS);
+    public void addSubtaskId(int subtaskId) {
+        if (subtaskId == this.getId()) {
+            throw new IllegalArgumentException("Epic cannot contain itself as subtask");
         }
+        subtaskIds.add(subtaskId);
     }
+
+    public void removeSubtaskId(int subtaskId) {
+        subtaskIds.remove(Integer.valueOf(subtaskId));
+    }
+
+
     @Override
     public String toString() {
         return "Epic{" +
@@ -37,8 +34,11 @@ public class Epic extends Task {
                 ", title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
+                ", subtaskIds=" + subtaskIds +
                 '}';
     }
+
+
 
 
 }

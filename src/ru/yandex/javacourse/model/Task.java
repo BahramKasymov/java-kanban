@@ -1,5 +1,7 @@
 package ru.yandex.javacourse.model;
 
+import ru.yandex.javacourse.service.HistoryManager;
+
 public class Task {
     private final String title;
     private final String description;
@@ -46,15 +48,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        int hash = 17;
-        if (title != null) {
-            hash = hash + title.hashCode();
-        }
-        hash = hash * 31;
-        if (description != null) {
-            hash = hash + description.hashCode();
-        }
-        return hash;
+        return Integer.hashCode(id);
     }
 
 
@@ -67,4 +61,6 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
+
+
 }
